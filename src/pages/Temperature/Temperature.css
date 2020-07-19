@@ -1,0 +1,39 @@
+.sunny {
+    --background: url(/assets/img/sunny.jpg) no-repeat center/cover;
+    opacity: 0.8;
+}
+.Clouds {
+    --background: url(/assets/img/cloudy.jpg) no-repeat center/cover;
+    opacity: 0.8;
+}
+.clear {
+    --background: url(/assets/img/clear.jpg) no-repeat center/cover;
+    opacity: 0.8;
+}
+.Haze {
+    --background: url(/assets/img/haze.jpg) no-repeat center/cover;
+    opacity: 0.8;
+}
+.sunny {
+    --background: url(/assets/img/sunny.jpg) no-repeat center/cover;
+    opacity: 0.8;
+}
+.location {
+    color: white;
+    font-size: 200%;
+    font-family: monospace;
+}
+.temp {
+    color: white;
+    /* text-align: center; */
+    font-size: 300%;
+    font-family: auto;
+    padding-left: 3%;
+}
+.weather {
+    color: white;
+    /* text-align: center; */
+    font-size: 100%;
+    font-family: cursive;
+    padding: 3px;
+}

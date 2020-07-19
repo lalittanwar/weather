@@ -1,19 +1,19 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Redirect, Route } from 'react-router-dom';
 import {
-  IonApp,
-  IonIcon,
-  IonLabel,
-  IonRouterOutlet,
-  IonTabBar,
-  IonTabButton,
-  IonTabs
+    IonApp,
+    IonIcon,
+    IonLabel,
+    IonRouterOutlet,
+    IonTabBar,
+    IonTabButton,
+    IonTabs
 } from '@ionic/react';
 import { IonReactRouter } from '@ionic/react-router';
 import { ellipse, square, triangle } from 'ionicons/icons';
-import Tab1 from './pages/Tab1';
-import Tab2 from './pages/Tab2';
-import Tab3 from './pages/Tab3';
+import Today from './pages/Today';
+import FiveDay from './pages/FiveDay';
+import Location from './pages/Location';
 
 /* Core CSS required for Ionic components to work properly */
 import '@ionic/react/css/core.css';
@@ -34,33 +34,48 @@ import '@ionic/react/css/display.css';
 /* Theme variables */
 import './theme/variables.css';
 
-const App: React.FC = () => (
-  <IonApp>
-    <IonReactRouter>
-      <IonTabs>
-        <IonRouterOutlet>
-          <Route path="/tab1" component={Tab1} exact={true} />
-          <Route path="/tab2" component={Tab2} exact={true} />
-          <Route path="/tab3" component={Tab3} />
-          <Route path="/" render={() => <Redirect to="/tab1" />} exact={true} />
-        </IonRouterOutlet>
-        <IonTabBar slot="bottom">
-          <IonTabButton tab="tab1" href="/tab1">
-            <IonIcon icon={triangle} />
-            <IonLabel>Tab 1</IonLabel>
-          </IonTabButton>
-          <IonTabButton tab="tab2" href="/tab2">
-            <IonIcon icon={ellipse} />
-            <IonLabel>Tab 2</IonLabel>
-          </IonTabButton>
-          <IonTabButton tab="tab3" href="/tab3">
-            <IonIcon icon={square} />
-            <IonLabel>Tab 3</IonLabel>
-          </IonTabButton>
-        </IonTabBar>
-      </IonTabs>
-    </IonReactRouter>
-  </IonApp>
-);
+interface IntrinsicElements {
+    sendLocationtoParent: any;
+}
 
+const App: React.FC = () => {
+
+    const [location, setLocation] = useState('')
+    const [weatherData, setweatherData] = useState('')
+
+    const handler = (location: any) => {
+        setLocation(location)
+        console.log('location =>', location);
+    }
+
+
+    return (
+        <IonApp>
+            <IonReactRouter>
+                <IonTabs>
+                    <IonRouterOutlet>
+                        <Route path="/today" render={ () => <Today sendLocationtoParent={ handler } /> } exact={ true } />
+                        <Route path="/5-day" component={ FiveDay } exact={ true } />
+                        <Route path="/location" component={ Location } />
+                        <Route path="/" render={ () => <Redirect to="/today" /> } exact={ true } />
+                    </IonRouterOutlet>
+                    <IonTabBar slot="bottom">
+                        <IonTabButton tab="today" href="/today">
+                            <IonIcon icon={ triangle } />
+                            <IonLabel>Today</IonLabel>
+                        </IonTabButton>
+                        <IonTabButton tab="5-day" href="/5-day">
+                            <IonIcon icon={ ellipse } />
+                            <IonLabel>5 Day Forecast</IonLabel>
+                        </IonTabButton>
+                        <IonTabButton tab="location" href="/location">
+                            <IonIcon icon={ square } />
+                            <IonLabel>Location</IonLabel>
+                        </IonTabButton>
+                    </IonTabBar>
+                </IonTabs>
+            </IonReactRouter>
+        </IonApp>
+    );
+}
 export default App;
