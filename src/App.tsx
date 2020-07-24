@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Redirect, Route } from 'react-router-dom';
 import {
     IonApp,
@@ -10,10 +10,8 @@ import {
     IonTabs
 } from '@ionic/react';
 import { IonReactRouter } from '@ionic/react-router';
-import { ellipse, square, triangle } from 'ionicons/icons';
-import Today from './pages/Today';
-import FiveDay from './pages/FiveDay';
-import Location from './pages/Location';
+import { rainy, home, compass, thermometer } from 'ionicons/icons';
+
 
 /* Core CSS required for Ionic components to work properly */
 import '@ionic/react/css/core.css';
@@ -34,42 +32,53 @@ import '@ionic/react/css/display.css';
 /* Theme variables */
 import './theme/variables.css';
 
-interface IntrinsicElements {
-    sendLocationtoParent: any;
-}
+/* Components */
+import Temperature from './pages/Temperature/Temperature';
+import Home from './pages/Home/Home';
+import FiveDay from './pages/FiveDay/FiveDay';
+import Location from './pages/Location/Location';
+import { fetchWeather } from './api'
 
 const App: React.FC = () => {
+    const [data, setLocation] = useState(null)
 
-    const [location, setLocation] = useState('')
-    const [weatherData, setweatherData] = useState('')
+    useEffect(() => {
 
-    const handler = (location: any) => {
-        setLocation(location)
-        console.log('location =>', location);
+        // console.log(data);
+    }, [])
+
+    const handler = async (location: any) => {
+        const data: any = await fetchWeather(location);
+        setLocation(data)
+        console.log('location =>', location, data);
     }
-
 
     return (
         <IonApp>
             <IonReactRouter>
                 <IonTabs>
                     <IonRouterOutlet>
-                        <Route path="/today" render={ () => <Today sendLocationtoParent={ handler } /> } exact={ true } />
-                        <Route path="/5-day" component={ FiveDay } exact={ true } />
+                        <Route path="/home" render={ () => <Home sendLocationtoParent={ handler } /> } exact={ true } />
+                        <Route path="/temperature" render={ () => <Temperature data={ data } /> } exact={ true } />
+                        {/* <Route path="/:tab(5-day)" render={ () => <FiveDay data={ data } /> } exact={ true } /> */ }
                         <Route path="/location" component={ Location } />
-                        <Route path="/" render={ () => <Redirect to="/today" /> } exact={ true } />
+                        <Route path="/" render={ () => <Redirect to="/home" /> } exact={ true } />
                     </IonRouterOutlet>
-                    <IonTabBar slot="bottom">
-                        <IonTabButton tab="today" href="/today">
-                            <IonIcon icon={ triangle } />
+                    <IonTabBar slot="bottom" color="danger" >
+                        <IonTabButton tab="home" href="/home">
+                            <IonIcon icon={ home } />
+                            <IonLabel>Home</IonLabel>
+                        </IonTabButton>
+                        <IonTabButton tab="temperature" href="/temperature">
+                            <IonIcon icon={ thermometer } />
                             <IonLabel>Today</IonLabel>
                         </IonTabButton>
                         <IonTabButton tab="5-day" href="/5-day">
-                            <IonIcon icon={ ellipse } />
+                            <IonIcon icon={ rainy } />
                             <IonLabel>5 Day Forecast</IonLabel>
                         </IonTabButton>
                         <IonTabButton tab="location" href="/location">
-                            <IonIcon icon={ square } />
+                            <IonIcon icon={ compass } />
                             <IonLabel>Location</IonLabel>
                         </IonTabButton>
                     </IonTabBar>

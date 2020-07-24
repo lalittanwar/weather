@@ -1,4 +1,4 @@
-.sunny {
+.Sunny {
     --background: url(/assets/img/sunny.jpg) no-repeat center/cover;
     opacity: 0.8;
 }
@@ -6,16 +6,36 @@
     --background: url(/assets/img/cloudy.jpg) no-repeat center/cover;
     opacity: 0.8;
 }
-.clear {
+.Clear {
     --background: url(/assets/img/clear.jpg) no-repeat center/cover;
     opacity: 0.8;
 }
-.Haze {
-    --background: url(/assets/img/haze.jpg) no-repeat center/cover;
+.Thunderstorm {
+    --background: url(/assets/img/thunderstorm.jpg) no-repeat center/cover;
     opacity: 0.8;
 }
-.sunny {
-    --background: url(/assets/img/sunny.jpg) no-repeat center/cover;
+.Drizzle {
+    --background: url(/assets/img/drizzle.jpg) no-repeat center/cover;
+    opacity: 0.8;
+}
+.Rain {
+    --background: url(/assets/img/rain.jpg) no-repeat center/cover;
+    opacity: 0.8;
+}
+.Snow {
+    --background: url(/assets/img/snow.jpg) no-repeat center/cover;
+    opacity: 0.8;
+}
+.Mist,
+.Smoke,
+.Dust,
+.Fog,
+.Sand,
+.Ash,
+.Squall,
+.Tornado,
+.Haze {
+    --background: url(/assets/img/haze.jpg) no-repeat center/cover;
     opacity: 0.8;
 }
 .location {
@@ -33,7 +53,7 @@
 .weather {
     color: white;
     /* text-align: center; */
-    font-size: 100%;
+    font-size: 150%;
     font-family: cursive;
     padding: 3px;
 }
