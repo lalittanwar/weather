@@ -4,9 +4,8 @@ import './FiveDay.css';
 import axios from 'axios';
 
 interface IntrinsicElements {
-    location: any;
+    data: any;
 }
-
 
 const FiveDay: React.FC<IntrinsicElements> = (props: IntrinsicElements) => {
 
@@ -33,19 +32,19 @@ const FiveDay: React.FC<IntrinsicElements> = (props: IntrinsicElements) => {
     weekday[6] = "Saturday";
 
 
-    useEffect(() => {
-        console.log(props.location);
-        axios.get(`https://api.openweathermap.org/data/2.5/forecast?q=${ props.location }&appid=761054a7adf90be0fd31535e2b0cbf31&units=metric`)
-            .then(res => {
-                console.log(res.data.list);
-                setTemp(res.data.list);
-            })
-    }, [])
+    // useEffect(() => {
+    //     console.log(props.location);
+    //     axios.get(`https://api.openweathermap.org/data/2.5/forecast?q=${ props.location }&appid=761054a7adf90be0fd31535e2b0cbf31&units=metric`)
+    //         .then(res => {
+    //             console.log(res.data.list);
+    //             setTemp(res.data.list);
+    //         })
+    // }, [])
 
     return (
         <IonPage>
             <IonHeader>
-                <IonToolbar color="danger">
+                <IonToolbar color="primary">
                     <IonTitle>5 Day Forecast</IonTitle>
                 </IonToolbar>
             </IonHeader>

@@ -37,20 +37,16 @@ import Temperature from './pages/Temperature/Temperature';
 import Home from './pages/Home/Home';
 import FiveDay from './pages/FiveDay/FiveDay';
 import Location from './pages/Location/Location';
-import { fetchWeather } from './api'
+import { fetchWeather } from './api';
 
 const App: React.FC = () => {
-    const [data, setLocation] = useState(null)
+    const [data, setData] = useState(null);
 
-    useEffect(() => {
-
-        // console.log(data);
-    }, [])
 
     const handler = async (location: any) => {
         const data: any = await fetchWeather(location);
-        setLocation(data)
-        console.log('location =>', location, data);
+        console.log(data);
+        setData(data);
     }
 
     return (
@@ -60,11 +56,11 @@ const App: React.FC = () => {
                     <IonRouterOutlet>
                         <Route path="/home" render={ () => <Home sendLocationtoParent={ handler } /> } exact={ true } />
                         <Route path="/temperature" render={ () => <Temperature data={ data } /> } exact={ true } />
-                        {/* <Route path="/:tab(5-day)" render={ () => <FiveDay data={ data } /> } exact={ true } /> */ }
+                        <Route path="/:tab(5-day)" render={ () => <FiveDay data={ data } /> } exact={ true } />
                         <Route path="/location" component={ Location } />
                         <Route path="/" render={ () => <Redirect to="/home" /> } exact={ true } />
                     </IonRouterOutlet>
-                    <IonTabBar slot="bottom" color="danger" >
+                    <IonTabBar slot="bottom" color="primary" >
                         <IonTabButton tab="home" href="/home">
                             <IonIcon icon={ home } />
                             <IonLabel>Home</IonLabel>

@@ -45,10 +45,10 @@
 }
 .temp {
     color: white;
-    /* text-align: center; */
     font-size: 300%;
-    font-family: auto;
+    font-family: unset;
     padding-left: 3%;
+    font-weight: 700;
 }
 .weather {
     color: white;
