@@ -9,16 +9,17 @@ interface IntrinsicElements {
 
 const FiveDay: React.FC<IntrinsicElements> = (props: IntrinsicElements) => {
 
-    const [temp, setTemp] = useState([])
-    const [main, setMain] = useState()
-    const [humidity, setHumidity] = useState()
-    const [pressure, setPressure] = useState()
-    const [wind, setWind] = useState()
-    const [sunrise, setSunrise] = useState<Date>()
-    const [sunset, setSunset] = useState()
+    const [weatherList, setWeatherList] = useState([]);
 
-    let sunriseInTime: any;
-    let sunsetInTime: any;
+    useEffect(() => {
+        setWeatherList(props?.data?.list);
+        console.log('w', weatherList);
+    }, [props.data])
+
+    if (!weatherList?.length) {
+        return <span>Loading...</span>;
+    }
+
     let date = new Date();
     let day = date.getDay();
 
@@ -31,16 +32,6 @@ const FiveDay: React.FC<IntrinsicElements> = (props: IntrinsicElements) => {
     weekday[5] = "Friday";
     weekday[6] = "Saturday";
 
-
-    // useEffect(() => {
-    //     console.log(props.location);
-    //     axios.get(`https://api.openweathermap.org/data/2.5/forecast?q=${ props.location }&appid=761054a7adf90be0fd31535e2b0cbf31&units=metric`)
-    //         .then(res => {
-    //             console.log(res.data.list);
-    //             setTemp(res.data.list);
-    //         })
-    // }, [])
-
     return (
         <IonPage>
             <IonHeader>
@@ -49,57 +40,45 @@ const FiveDay: React.FC<IntrinsicElements> = (props: IntrinsicElements) => {
                 </IonToolbar>
             </IonHeader>
             <IonContent>
-                {/* <IonHeader collapse="condense">
-                    <IonToolbar>
-                        <IonTitle size="large">5 Day Forecast</IonTitle>
-                    </IonToolbar>
-                </IonHeader> */}
-                {/* <ul>{ temp.filter((e, i) => (i % 8) == 0).map((element, index) => <li key={ index }> { element.main.temp } </li>) }</ul>  */ }
-                {/* <div>
-                    { temp.filter((e, i) => (i % 8) == 0).map((element, index) =>
-                        <div className={ `box${ index }` }>
-                            { element.main.temp }
-                        </div>) }
-                </div> */}
                 <div className="box1">
                     <span className="temp-forecast">Today</span>
                     <span className="temp-forecast">
-                        <p>{ temp[0]?.main.temp }°C</p>
-                        <p>{ temp[0]?.weather[0].description }</p>
+                        <p>{ weatherList[0]?.main?.temp }°C</p>
+                        <p>{ weatherList[0]?.weather[0]?.description }</p>
                     </span>
-                    <span className="temp-forecast-img"><img src={ `assets/icon/${ temp[0]?.weather[0].icon }.png` } /></span>
+                    <span className="temp-forecast-img"><img src={ `assets/icon/${ weatherList[0]?.weather[0].icon }.png` } /></span>
                 </div>
                 <div className="box2">
                     <span className="temp-forecast">Tomorrow</span>
                     <span className="temp-forecast">
-                        <p>{ temp[1]?.main.temp }°C</p>
-                        <p>{ temp[1]?.weather[0].description }</p>
+                        <p>{ weatherList[7]?.main.temp }°C</p>
+                        <p>{ weatherList[7]?.weather[0].description }</p>
                     </span>
-                    <span className="temp-forecast-img"><img src={ `assets/icon/${ temp[1]?.weather[0].icon }.png` } /></span>
+                    <span className="temp-forecast-img"><img src={ `assets/icon/${ weatherList[7]?.weather[0].icon }.png` } /></span>
                 </div>
                 <div className="box3">
                     <span className="temp-forecast">{ weekday[(day + 2) > 6 ? (day + 2 - 7) : (day + 2)] }</span>
                     <span className="temp-forecast">
-                        <p>{ temp[2]?.main.temp }°C</p>
-                        <p>{ temp[2]?.weather[0].description }</p>
+                        <p>{ weatherList[15]?.main.temp }°C</p>
+                        <p>{ weatherList[15]?.weather[0].description }</p>
                     </span>
-                    <span className="temp-forecast-img"><img src={ `assets/icon/${ temp[2]?.weather[0].icon }.png` } /></span>
+                    <span className="temp-forecast-img"><img src={ `assets/icon/${ weatherList[15]?.weather[0].icon }.png` } /></span>
                 </div>
                 <div className="box4">
                     <span className="temp-forecast">{ weekday[(day + 3) > 6 ? (day + 3 - 7) : (day + 3)] }</span>
                     <span className="temp-forecast">
-                        <p>{ temp[3]?.main.temp }°C</p>
-                        <p>{ temp[3]?.weather[0].description }</p>
+                        <p>{ weatherList[23]?.main.temp }°C</p>
+                        <p>{ weatherList[23]?.weather[0].description }</p>
                     </span>
-                    <span className="temp-forecast-img"><img src={ `assets/icon/${ temp[3]?.weather[0].icon }.png` } /></span>
+                    <span className="temp-forecast-img"><img src={ `assets/icon/${ weatherList[23]?.weather[0].icon }.png` } /></span>
                 </div>
                 <div className="box5">
                     <span className="temp-forecast">{ weekday[(day + 4) > 6 ? (day + 4 - 7) : (day + 4)] }</span>
                     <span className="temp-forecast">
-                        <p>{ temp[4]?.main.temp }°C</p>
-                        <p>{ temp[4]?.weather[0].description }</p>
+                        <p>{ weatherList[31]?.main.temp }°C</p>
+                        <p>{ weatherList[31]?.weather[0].description }</p>
                     </span>
-                    <span className="temp-forecast-img"><img src={ `assets/icon/${ temp[4]?.weather[0].icon }.png` } /></span>
+                    <span className="temp-forecast-img"><img src={ `assets/icon/${ weatherList[31]?.weather[0].icon }.png` } /></span>
                 </div>
             </IonContent>
         </IonPage >

@@ -1,13 +1,8 @@
-import React, { useState, useEffect } from 'react';
-import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonItem, IonLabel, IonInput, IonButton, IonCard, IonCardContent, IonChip, IonIcon } from '@ionic/react';
+import React, { useState } from 'react';
+import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonItem, IonLabel, IonInput, IonButton, IonCard, IonCardContent, IonChip, IonIcon, IonLoading } from '@ionic/react';
 import './Home.css';
-import axios from 'axios';
 import { useHistory } from "react-router-dom";
-import { searchCircle, searchOutline, thermometer, searchSharp, add } from 'ionicons/icons';
-import Button from '@material-ui/core/Button';
-import Icon from '@material-ui/core/Icon';
-import SearchIcon from '@material-ui/icons/Search';
-import Add from '@material-ui/icons/Add';
+import { searchSharp, add, locationSharp } from 'ionicons/icons';
 
 
 
@@ -19,38 +14,31 @@ const Home: React.FC<IntrinsicElements> = ({ sendLocationtoParent }: IntrinsicEl
 
     let history = useHistory();
 
-    const [location, setLocation] = useState('')
-    const [cities, setCities] = useState([])
-    const [temp, setTemp] = useState(null)
-    const [weatherData, setweatherData] = useState('')
-
-    useEffect(() => {
-        let city = [];
-        for (let i = 0;i < localStorage.length;i++) {
-            city[i] = localStorage.getItem(`${ i }`);
-        }
-        console.log(city);
-        setCities(city);
-    }, [])
+    const [location, setLocation] = useState('');
+    const [popularCities] = useState(['Delhi', 'Mumbai', 'Chennai', 'kolkata']);
+    const [showLoading, setShowLoading] = useState(true);
 
     const search = () => {
+        setShowLoading(true)
         sendLocationtoParent(location);
         history.push('/temperature');
+        setLocation('');
     }
+
+    setTimeout(() => {
+        setShowLoading(false);
+    }, 1000);
 
     const addCity = () => {
         let city = [];
         let i: number = localStorage.length;
         localStorage.setItem(i.toString(), location);
-        for (let i = 0;i < localStorage.length;i++) {
-            city[i] = localStorage.getItem(`${ i }`);
-        }
-        setCities(city)
+        history.push('/city');
+        setLocation('');
     }
 
     const selectCity = (city: any) => {
         sendLocationtoParent(city);
-        setLocation(city);
         history.push('/temperature');
     }
 
@@ -59,28 +47,38 @@ const Home: React.FC<IntrinsicElements> = ({ sendLocationtoParent }: IntrinsicEl
         <IonPage>
             <IonHeader >
                 <IonToolbar color="primary" >
-                    <IonTitle>Home</IonTitle>
+                    <IonTitle>Search City</IonTitle>
                 </IonToolbar>
             </IonHeader>
             <IonContent>
                 <div className="ion-padding">
                     <IonItem >
-                        <IonLabel position="floating">Location</IonLabel>
-                        <IonInput onIonChange={ e => setLocation(e.detail.value!) }></IonInput>
+                        <IonLabel position="floating">Input the city name</IonLabel>
+                        <IonInput value={ location } onIonChange={ e => setLocation(e.detail.value!) }></IonInput>
                     </IonItem><br />
-                    <IonButton color="danger" size="default" onClick={ search }>   <IonIcon icon={ searchSharp } />Search</IonButton>
-                    {/* <Button variant="contained" color="secondary" size="small" startIcon={ <SearchIcon /> } onClick={ search }>Search</Button> */ }
-                    {/* <Button variant="contained" color="primary" size="small" startIcon={ <Add /> } onClick={ addCity }>Add</Button> */ }
-                    <IonButton color="success" onClick={ addCity }>   <IonIcon icon={ add } />Add</IonButton>
+                    <div className="center" >
+                        <IonButton className="ion=padding" color="tertiary" size="small" onClick={ search }>   <IonIcon icon={ searchSharp } />Search</IonButton>
+                        <IonButton color="danger" size="small" onClick={ addCity }>   <IonIcon icon={ add } />Add</IonButton>
+                        <IonButton color="secondary" size="small" onClick={ () => history.push('/location') }>   <IonIcon icon={ locationSharp } />Location</IonButton>
+                    </div>
                 </div>
 
-                <div>{ cities.map((city, index) =>
-                    <IonChip color="tertiary" outline key={ index } onClick={ () => selectCity(city) }>
-                        <IonLabel  >
-                            { city?.toUpperCase() }
-                        </IonLabel >
-                    </IonChip>) }
+                <div className="ion-padding">
+                    <p className="popular-cities">POPULAR CITIES</p>
+                    { popularCities.map((city, index) =>
+                        <IonChip color="medium" outline key={ index } onClick={ () => selectCity(city) }>
+                            <IonLabel  >
+                                { city?.toUpperCase() }
+                            </IonLabel >
+                        </IonChip>) }
                 </div>
+                <IonLoading
+                    spinner="lines-small"
+                    isOpen={ showLoading }
+                    onDidDismiss={ () => setShowLoading(false) }
+                    message={ 'Please wait...' }
+                    duration={ 1000 }
+                />
             </IonContent>
         </IonPage>
 

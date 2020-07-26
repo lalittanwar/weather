@@ -1,8 +1,6 @@
 import axios from 'axios';
-import { mainModule } from 'process';
 
 export const fetchWeather = async ( city ) => {
-
     try {
         const { data } = await axios.get( `https://api.openweathermap.org/data/2.5/weather?q=${ city }&appid=761054a7adf90be0fd31535e2b0cbf31&units=metric` )
         const modifiedData = {
@@ -15,7 +13,18 @@ export const fetchWeather = async ( city ) => {
         }
         return modifiedData;
     } catch ( error ) {
-
+        console.log( error )
     }
+}
 
+export const fetchFiveDayForecast = async ( city ) => {
+    try {
+        const { data } = await axios.get( `https://api.openweathermap.org/data/2.5/forecast?q=${ city }&appid=761054a7adf90be0fd31535e2b0cbf31&units=metric` )
+        const modifiedData = {
+            list: data.list
+        }
+        return modifiedData;
+    } catch ( error ) {
+        console.log( error )
+    }
 }
