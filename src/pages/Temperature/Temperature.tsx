@@ -3,7 +3,7 @@ import { IonPage, IonHeader, IonToolbar, IonButtons, IonTitle, IonContent, IonIc
 import './Temperature.css'
 import { flower, water, navigateCircle, thermometer, add, list } from 'ionicons/icons';
 import { useHistory } from 'react-router-dom';
-import { Link } from 'react-router-dom'
+
 
 interface IntrinsicElements {
     data: any;
