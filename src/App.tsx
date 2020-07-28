@@ -42,11 +42,11 @@ import City from './pages/City/City';
 
 const App: React.FC = () => {
     const [data, setData] = useState(null);
+    const [error, setError] = useState(null);
     const [fiveDaydata, setFiveDaydata] = useState(null);
 
     useEffect(() => {
         getDefaultLocation();
-
     }, [])
 
 
@@ -61,10 +61,14 @@ const App: React.FC = () => {
     }
 
 
-    const handler = async (location: any) => {
-        const data: any = await fetchWeather(location);
-        setData(data);
-        const fiveDaydata: any = await fetchFiveDayForecast(location);
+    const handler = (location: any) => {
+        fetchWeather(location).then((data) => {
+            setData(data);
+        }).catch((err) => {
+            console.log('Rohit here' + err);
+            setError(err);
+        })
+        // const fiveDaydata: any = await fetchFiveDayForecast(location);
         setFiveDaydata(fiveDaydata);
         console.log(data);
         console.log(fiveDaydata);
@@ -76,7 +80,7 @@ const App: React.FC = () => {
                 <IonTabs>
                     <IonRouterOutlet>
                         <Route path="/home" render={ () => <Home sendLocationtoParent={ handler } /> } exact={ true } />
-                        <Route path="/:tab(temperature)" render={ () => <Temperature data={ data } /> } exact={ true } />
+                        <Route path="/:tab(temperature)" render={ () => <Temperature data={ data } error={ error } /> } exact={ true } />
                         <Route path="/:tab(5-day)" render={ () => <FiveDay data={ fiveDaydata } /> } exact={ true } />
                         <Route path="/location" component={ Location } />
                         <Route path="/city" render={ () => <City sendLocationtoParent={ handler } /> } exact={ true } />

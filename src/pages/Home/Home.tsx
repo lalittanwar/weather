@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonItem, IonLabel, IonInput, IonButton, IonCard, IonCardContent, IonChip, IonIcon, IonLoading } from '@ionic/react';
+import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonItem, IonLabel, IonInput, IonButton, IonCard, IonCardContent, IonChip, IonIcon, IonLoading, IonBackButton, IonButtons } from '@ionic/react';
 import './Home.css';
 import { useHistory } from "react-router-dom";
 import { searchSharp, add, locationSharp } from 'ionicons/icons';
@@ -13,21 +13,15 @@ interface IntrinsicElements {
 const Home: React.FC<IntrinsicElements> = ({ sendLocationtoParent }: IntrinsicElements, props) => {
 
     let history = useHistory();
-
     const [location, setLocation] = useState('');
     const [popularCities] = useState(['Delhi', 'Mumbai', 'Chennai', 'kolkata']);
-    const [showLoading, setShowLoading] = useState(true);
 
     const search = () => {
-        setShowLoading(true)
         sendLocationtoParent(location);
         history.push('/temperature');
         setLocation('');
     }
 
-    setTimeout(() => {
-        setShowLoading(false);
-    }, 1000);
 
     const addCity = () => {
         let city = [];
@@ -47,6 +41,9 @@ const Home: React.FC<IntrinsicElements> = ({ sendLocationtoParent }: IntrinsicEl
         <IonPage>
             <IonHeader >
                 <IonToolbar color="primary" >
+                    <IonButtons slot="start">
+                        <IonBackButton />
+                    </IonButtons>
                     <IonTitle>Search City</IonTitle>
                 </IonToolbar>
             </IonHeader>
@@ -72,13 +69,6 @@ const Home: React.FC<IntrinsicElements> = ({ sendLocationtoParent }: IntrinsicEl
                             </IonLabel >
                         </IonChip>) }
                 </div>
-                <IonLoading
-                    spinner="lines-small"
-                    isOpen={ showLoading }
-                    onDidDismiss={ () => setShowLoading(false) }
-                    message={ 'Please wait...' }
-                    duration={ 1000 }
-                />
             </IonContent>
         </IonPage>
 

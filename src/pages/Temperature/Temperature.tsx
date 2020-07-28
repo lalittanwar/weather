@@ -3,16 +3,19 @@ import { IonPage, IonHeader, IonToolbar, IonButtons, IonTitle, IonContent, IonIc
 import './Temperature.css'
 import { flower, water, navigateCircle, thermometer, add, list } from 'ionicons/icons';
 import { useHistory } from 'react-router-dom';
+import NotFound from '../NotFound/NotFound';
 
 
 interface IntrinsicElements {
     data: any;
+    error: any
 }
 
 const Temperature: React.FC<IntrinsicElements> = (props: IntrinsicElements) => {
 
     let history = useHistory();
     const [showLoading, setShowLoading] = useState(true);
+    const [error, setError] = useState(null);
     const [weather, setWeather] = useState(
         {
             name: null, temp: null, main: null,
@@ -20,6 +23,7 @@ const Temperature: React.FC<IntrinsicElements> = (props: IntrinsicElements) => {
         });
 
     useEffect(() => {
+        console.log(props);
         setWeather({
             name: props?.data?.name,
             temp: props?.data?.temp,
@@ -28,7 +32,9 @@ const Temperature: React.FC<IntrinsicElements> = (props: IntrinsicElements) => {
             pressure: props?.data?.pressure,
             wind: props?.data?.wind
         })
-    }, [props.data])
+        setError(props.error);
+        console.log('aaa', props.error);
+    }, [props.data, props.error])
 
     setTimeout(() => {
         setShowLoading(false);
@@ -38,39 +44,46 @@ const Temperature: React.FC<IntrinsicElements> = (props: IntrinsicElements) => {
         setShowLoading(true);
     })
 
-    return (
-        <IonPage>
-            <IonHeader>
-                <IonToolbar color="primary" >
-                    <IonButtons slot="start">
-                        <IonBackButton />
-                    </IonButtons>
-                    <IonTitle>{ weather.name }</IonTitle>
-                </IonToolbar>
-            </IonHeader>
+    if (error) {
+        return <NotFound />
+    } else {
 
-            <IonContent className={ `${ weather.main }` }>
-                <div className="container">
-                    <div className="temp">  { weather.temp }°</div>
-                    <div>
-                        <div className="weather"> <IonIcon icon={ flower } /> { weather.main }</div>
-                        <div className="weather"> <IonIcon icon={ water } /> { weather.humidity } %</div>
-                        <div className="weather"> <IonIcon icon={ navigateCircle } /> { weather.wind } m/s</div>
-                        <div className="weather"> <IonIcon icon={ thermometer } /> { weather.pressure } hpa</div>
+        return (
+            <IonPage>
+                <IonHeader>
+                    <IonToolbar color="primary" >
+                        <IonButtons slot="start">
+                            <IonBackButton />
+                        </IonButtons>
+                        <IonTitle>{ weather.name }</IonTitle>
+                    </IonToolbar>
+                </IonHeader>
+
+                {/* { error && <div> <NotFound /></div> } */ }
+                <IonContent className={ `${ weather.main }` }>
+                    <div className="container">
+                        <div className="temp">  { weather.temp }°</div>
+                        <div>
+                            <div className="weather"> <IonIcon icon={ flower } /> { weather.main }</div>
+                            <div className="weather"> <IonIcon icon={ water } /> { weather.humidity } %</div>
+                            <div className="weather"> <IonIcon icon={ navigateCircle } /> { weather.wind } m/s</div>
+                            <div className="weather"> <IonIcon icon={ thermometer } /> { weather.pressure } hpa</div>
+                        </div>
                     </div>
-                </div>
-                <IonFabButton className="fab-button" onClick={ () => history.push('/city') }>
-                    <IonIcon icon={ list } /></IonFabButton>
-                <IonLoading
-                    spinner="lines-small"
-                    isOpen={ showLoading }
-                    onDidDismiss={ () => setShowLoading(false) }
-                    message={ 'Please wait...' }
-                    duration={ 1000 }
-                />
-            </IonContent>
-        </IonPage>
-    )
+                    <IonFabButton className="fab-button" onClick={ () => history.push('/city') }>
+                        <IonIcon icon={ list } /></IonFabButton>
+                    <IonLoading
+                        spinner="lines-small"
+                        isOpen={ showLoading }
+                        onDidDismiss={ () => setShowLoading(false) }
+                        message={ 'Please wait...' }
+                        duration={ 1000 }
+                    />
+                </IonContent>
+            </IonPage>
+
+        )
+    }
 }
 
 export default Temperature

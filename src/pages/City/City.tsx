@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
-import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonItem, IonLabel, IonInput, IonButton, IonCard, IonCardContent, IonChip, IonIcon, IonLoading, IonFabButton, useIonViewWillEnter, IonCardHeader, IonItemSliding, IonItemOptions, IonItemOption } from '@ionic/react';
+import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonItem, IonLabel, IonInput, IonButton, IonCard, IonCardContent, IonChip, IonIcon, IonLoading, IonFabButton, useIonViewWillEnter, IonCardHeader, IonItemSliding, IonItemOptions, IonItemOption, IonButtons, IonBackButton } from '@ionic/react';
 import { useHistory } from 'react-router-dom';
-import { add, archive, ellipsisHorizontal, ellipsisVertical, trash, cloudOffline } from 'ionicons/icons';
+import { add, archive, ellipsisHorizontal, ellipsisVertical, trash } from 'ionicons/icons';
 import { fetchWeather } from '../../api';
 import './City.css';
 import { trace } from 'console';
@@ -21,7 +21,7 @@ const City = ({ sendLocationtoParent }: any) => {
 
     const setTemparatureToCity = async () => {
         let city: string[] = [];
-        let weather = [];
+        let weather: any[] = [];
         console.log(city);
         for (let i = 0;i < localStorage.length;i++) {
             city[i] = localStorage.getItem(`${ i }`);
@@ -38,47 +38,40 @@ const City = ({ sendLocationtoParent }: any) => {
         history.push('/temperature');
     }
 
-    const deleteCity = (city: any) => {
-        console.log(city);
-        for (let i = 0;i < localStorage.length;i++) {
-            if (city.toLocaleLowerCase() == localStorage.getItem(`${ i }`)) {
-                localStorage.removeItem(`${ i }`);
-                setTemparatureToCity();
-                break;
-            }
-        }
-    }
+    setTimeout(() => {
+        setShowLoading(false);
+    }, 2000);
+
 
     return (
         <IonPage>
             <IonHeader >
                 <IonToolbar color="primary" >
+                    <IonButtons slot="start">
+                        <IonBackButton />
+                    </IonButtons>
                     <IonTitle>City List</IonTitle>
                 </IonToolbar>
             </IonHeader>
             <IonContent>
 
                 { weather.map((weather, index) =>
-                    <IonItemSliding key={ index }>
-                        <IonItem className={ `city-${ weather?.main }` } onClick={ () => selectCity(weather?.name) }>
-                            <div>
-                                <h1 className="city-temp">{ weather?.temp }°</h1>
-                                <p className="name">{ weather?.name }</p>
-                                <span className="type">{ weather?.main }</span>
-                            </div>
-                        </IonItem>
-                        <IonItemOptions>
-                            <IonItemOption color="danger" onClick={ () => deleteCity(weather?.name) }>
-                                <IonIcon slot="icon-only" icon={ trash } />
-                            </IonItemOption>
-                        </IonItemOptions>
-                    </IonItemSliding>
-                ) }
-
+                    <IonCard className={ `city-${ weather?.main }` } key={ index } onClick={ () => selectCity(weather?.name) }>
+                        <IonCardHeader style={ { fontSize: '25px', color: 'white' } }>{ weather?.temp }° </IonCardHeader>
+                        <IonCardContent >
+                            <span className="name">{ weather?.name }</span>
+                            <span className="type">{ weather?.main }</span>
+                        </IonCardContent >
+                    </IonCard>) }
                 <IonFabButton color="tertiary" className="fab-button" onClick={ () => history.push('/home') }>
                     <IonIcon icon={ add } /></IonFabButton>
-
-
+                <IonLoading
+                    spinner="lines-small"
+                    isOpen={ showLoading }
+                    onDidDismiss={ () => setShowLoading(false) }
+                    message={ 'Please wait...' }
+                    duration={ 1000 }
+                />
             </IonContent>
         </IonPage>
     )
