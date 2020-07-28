@@ -1,83 +1,89 @@
 import React, { useEffect, useState } from 'react'
-import { IonPage, IonHeader, IonToolbar, IonButtons, IonMenuButton, IonTitle, IonContent, IonIcon, IonBackButton, useIonViewDidEnter, useIonViewWillEnter, useIonViewWillLeave } from '@ionic/react'
+import { IonPage, IonHeader, IonToolbar, IonButtons, IonTitle, IonContent, IonIcon, IonBackButton, useIonViewDidEnter, useIonViewWillEnter, useIonViewWillLeave, IonFabButton, IonLoading } from '@ionic/react'
 import './Temperature.css'
-import { water, thermometer, navigateCircle, flower } from 'ionicons/icons';
-import axios from 'axios';
+import { flower, water, navigateCircle, thermometer, add, list } from 'ionicons/icons';
+import { useHistory } from 'react-router-dom';
+import NotFound from '../NotFound/NotFound';
+
 
 interface IntrinsicElements {
     data: any;
+    error: any
 }
 
 const Temperature: React.FC<IntrinsicElements> = (props: IntrinsicElements) => {
-    const [location, setLocation] = useState('')
-    const [temp, setTemp] = useState()
-    const [main, setMain] = useState()
-    const [humidity, setHumidity] = useState()
-    const [pressure, setPressure] = useState()
-    const [wind, setWind] = useState()
-    const [sunrise, setSunrise] = useState<Date>()
-    const [sunset, setSunset] = useState()
 
-    let sunriseInTime: any;
-    let sunsetInTime: any;
+    let history = useHistory();
+    const [showLoading, setShowLoading] = useState(true);
+    const [error, setError] = useState(null);
+    const [weather, setWeather] = useState(
+        {
+            name: null, temp: null, main: null,
+            humidity: null, pressure: null, wind: null
+        });
 
     useEffect(() => {
-        console.log('props.location ', props.data);
-        setTemp(props.data.temp);
+        console.log(props);
+        setWeather({
+            name: props?.data?.name,
+            temp: props?.data?.temp,
+            main: props?.data?.main,
+            humidity: props?.data?.humidity,
+            pressure: props?.data?.pressure,
+            wind: props?.data?.wind
+        })
+        setError(props.error);
+        console.log('aaa', props.error);
+    }, [props.data, props.error])
 
-    }, [props.data])
+    setTimeout(() => {
+        setShowLoading(false);
+    }, 2000);
 
-    // useIonViewWillEnter(() => {
-    //     console.log('useIonViewWillEnter', props.data);
-    //     setTemp(props.data.temp);
-
-    // })
-
-    useIonViewWillLeave(() => {
-        setLocation('');
-        console.log('useIonViewWillLeave', location);
+    useIonViewWillEnter(() => {
+        setShowLoading(true);
     })
 
-    /*  const fetchWeatherData = () => {
-         axios.get(`https://api.openweathermap.org/data/2.5/weather?q=${ props.location }&appid=761054a7adf90be0fd31535e2b0cbf31&units=metric`)
-             .then(res => {
-                 console.log(res.data.name);
-                 setTemp(res.data.main.temp);
-                 setHumidity(res.data.main.humidity);
-                 setMain(res.data.weather[0].main);
-                 setPressure(res.data.main.pressure)
-                 setWind(res.data.wind.speed)
-                 // this.sunriseInTime = new Date(res.data.sys.sunrise * 1000);
-                 // setSunrise(this.sunriseInTime)
-                 // this.sunsetInTime = new Date(res.data.sys.sunset * 1000);
-                 // setSunset(res.data.sys.sunset)
- 
-             })
-     } */
+    if (error) {
+        return <NotFound />
+    } else {
 
-    return (
-        <IonPage>
-            <IonHeader>
-                <IonToolbar color="danger" >
-                    <IonButtons slot="start">
-                        <IonBackButton />
-                    </IonButtons>
-                    <IonTitle>Today</IonTitle>
-                </IonToolbar>
-            </IonHeader>
+        return (
+            <IonPage>
+                <IonHeader>
+                    <IonToolbar color="primary" >
+                        <IonButtons slot="start">
+                            <IonBackButton />
+                        </IonButtons>
+                        <IonTitle>{ weather.name }</IonTitle>
+                    </IonToolbar>
+                </IonHeader>
 
-            <IonContent className={ main }>
-                {/* <div className="location ion-padding">{ props.location.toUpperCase() }</div> */ }
-                <div >  { temp }°C</div>
-                {/* <div className="weather"> <IonIcon icon={ flower } /> { main }</div>
-                <div className="weather"> <IonIcon icon={ water } /> { humidity } %</div>
-                <div className="weather"> <IonIcon icon={ navigateCircle } /> { wind } m/s</div>
-                <div className="weather"> <IonIcon icon={ thermometer } /> { pressure } hpa</div> */}
-                {/* <div className="weather"> <IonIcon icon={ thermometer } /> { sunrise }</div> */ }
-                {/* <div className="weather"> <IonIcon icon={ thermometer } /> { sunset }</div> */ }
-            </IonContent>
-        </IonPage>
-    )
+                {/* { error && <div> <NotFound /></div> } */ }
+                <IonContent className={ `${ weather.main }` }>
+                    <div className="container">
+                        <div className="temp">  { weather.temp }°</div>
+                        <div>
+                            <div className="weather"> <IonIcon icon={ flower } /> { weather.main }</div>
+                            <div className="weather"> <IonIcon icon={ water } /> { weather.humidity } %</div>
+                            <div className="weather"> <IonIcon icon={ navigateCircle } /> { weather.wind } m/s</div>
+                            <div className="weather"> <IonIcon icon={ thermometer } /> { weather.pressure } hpa</div>
+                        </div>
+                    </div>
+                    <IonFabButton className="fab-button" onClick={ () => history.push('/city') }>
+                        <IonIcon icon={ list } /></IonFabButton>
+                    <IonLoading
+                        spinner="lines-small"
+                        isOpen={ showLoading }
+                        onDidDismiss={ () => setShowLoading(false) }
+                        message={ 'Please wait...' }
+                        duration={ 1000 }
+                    />
+                </IonContent>
+            </IonPage>
+
+        )
+    }
 }
 
 export default Temperature

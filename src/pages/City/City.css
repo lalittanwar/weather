@@ -1,0 +1,61 @@
+.city-Sunny {
+    --background: url(/assets/img/background/sunny.png) no-repeat center/cover;
+    /* opacity: 0.8; */
+}
+.city-Clouds {
+    --background: url(/assets/img/background/cloudy.png) no-repeat center/cover;
+    /* opacity: 0.8; */
+}
+.city-Clear {
+    --background: url(/assets/img/background/clear.png) no-repeat center/cover;
+    /* opacity: 0.8; */
+}
+.city-Thunderstorm {
+    --background: url(/assets/img/background/thunderstorm.png) no-repeat center/cover;
+    /* opacity: 0.8; */
+}
+.city-Drizzle {
+    --background: url(/assets/img/background/drizzle.png) no-repeat center/cover;
+    /* opacity: 0.8; */
+}
+.city-Rain {
+    --background: url(/assets/img/background/rain.png) no-repeat center/cover;
+    /* opacity: 0.8; */
+}
+.city-Snow {
+    --background: url(/assets/img/background/snow.png) no-repeat center/cover;
+    /* opacity: 0.8; */
+}
+.city-Mist,
+.city-Smoke,
+.city-Dust,
+.city-Fog,
+.city-Sand,
+.city-Ash,
+.city-Squall,
+.city-Tornado,
+.city-Haze {
+    --background: url(/assets/img/background/haze.png) no-repeat center/cover;
+    /* opacity: 0.8; */
+}
+.city-temp {
+    color: white;
+    font-size: 35px;
+}
+.type {
+    position: absolute;
+    right: 10%;
+    bottom: 17%;
+    font-size: 18px;
+    color: white;
+}
+.name {
+    color: white;
+    font-size: 18px;
+}
+.fab-button {
+    position: fixed;
+    bottom: 5%;
+    right: 5%;
+    z-index: 100;
+}

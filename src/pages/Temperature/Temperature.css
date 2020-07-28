@@ -38,22 +38,27 @@
     --background: url(/assets/img/haze.jpg) no-repeat center/cover;
     opacity: 0.8;
 }
+.container {
+    padding: 10px 12px;
+}
 .location {
     color: white;
-    font-size: 200%;
-    font-family: monospace;
+    font-size: 300%;
+    font-family: inherit;
 }
 .temp {
     color: white;
-    /* text-align: center; */
     font-size: 300%;
-    font-family: auto;
-    padding-left: 3%;
+    padding: 0 0 10px 0px;
 }
 .weather {
     color: white;
-    /* text-align: center; */
-    font-size: 150%;
-    font-family: cursive;
-    padding: 3px;
+    font-size: 125%;
+    font-family: inherit;
+    padding: 2px 0;
+}
+.fab-button {
+    position: fixed;
+    bottom: 5%;
+    right: 5%;
 }
