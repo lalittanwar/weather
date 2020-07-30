@@ -59,7 +59,7 @@ const City = ({ sendLocationtoParent }: any) => {
             <IonContent color={ state ? 'light' : 'dark' }>
                 { weather.map((weather, index) =>
                     <IonCard className={ `city-${ weather?.main }` } key={ index } onClick={ () => selectCity(weather?.name) }>
-                        <IonCardHeader style={ { fontSize: '25px', color: 'white' } }>{ weather?.temp }° </IonCardHeader>
+                        <IonCardHeader style={ { fontSize: '25px', color: 'white' } }>{ parseInt(weather?.temp) }° </IonCardHeader>
                         <IonCardContent >
                             <span className="name">{ weather?.name }</span>
                             <span className="type">{ weather?.main }</span>

@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useContext } from 'react';
-import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonCard, IonCardHeader, IonCardContent, IonItem, IonLabel, IonSelect, IonSelectOption } from '@ionic/react';
+import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonCard, IonCardContent, IonItem, IonLabel, IonSelect, IonSelectOption } from '@ionic/react';
 import './Location.css';
 import { fetchCovidData, fetchCovidCountries } from './../../api';
 import CountUp from 'react-countup';

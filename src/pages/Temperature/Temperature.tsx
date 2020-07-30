@@ -62,11 +62,10 @@ const Temperature: React.FC<IntrinsicElements> = (props: IntrinsicElements) => {
                     </IonToolbar>
                 </IonHeader>
 
-                {/* { error && <div> <NotFound /></div> } */ }
                 <IonContent className={ `${ weather.main }` }>
                     <div className="container">
-                        <div className="temp">  { weather.temp }°</div>
-                        <div>
+                        <div className="temp">  { parseInt(weather.temp) }°</div>
+                        <div className="weather-padding">
                             <div className="weather"> <IonIcon icon={ flower } /> { weather.main }</div>
                             <div className="weather"> <IonIcon icon={ water } /> { weather.humidity } %</div>
                             <div className="weather"> <IonIcon icon={ navigateCircle } /> { weather.wind } m/s</div>

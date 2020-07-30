@@ -87,13 +87,10 @@ const App = () => {
         fetchWeather( location ).then( ( data ) => {
             setData( data );
         } ).catch( ( err ) => {
-            console.log( 'Rohit here' + err );
             setError( err );
         } )
-        // const fiveDaydata: any = await fetchFiveDayForecast(location);
         setFiveDaydata( fiveDaydata );
-        console.log( data );
-        console.log( fiveDaydata );
+
     }
 
     return (
