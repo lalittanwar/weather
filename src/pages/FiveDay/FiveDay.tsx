@@ -1,13 +1,16 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useContext } from 'react'
 import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar } from '@ionic/react';
 import './FiveDay.css';
-import axios from 'axios';
+import { context } from '../../App';
 
 interface IntrinsicElements {
     data: any;
 }
 
 const FiveDay: React.FC<IntrinsicElements> = (props: IntrinsicElements) => {
+
+    const themeContext: any = useContext(context);
+    const { state, dispatch } = themeContext;
 
     const [weatherList, setWeatherList] = useState([]);
 
@@ -35,11 +38,11 @@ const FiveDay: React.FC<IntrinsicElements> = (props: IntrinsicElements) => {
     return (
         <IonPage>
             <IonHeader>
-                <IonToolbar color="primary">
+                <IonToolbar color={ state ? 'success' : 'primary' } >
                     <IonTitle>5 Day Forecast</IonTitle>
                 </IonToolbar>
             </IonHeader>
-            <IonContent>
+            <IonContent color={ state ? 'light' : 'dark' }>
                 <div className="box1">
                     <span className="temp-forecast">Today</span>
                     <span className="temp-forecast">

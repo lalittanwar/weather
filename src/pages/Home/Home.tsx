@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonItem, IonLabel, IonInput, IonButton, IonCard, IonCardContent, IonChip, IonIcon, IonLoading, IonBackButton, IonButtons } from '@ionic/react';
 import './Home.css';
 import { useHistory } from "react-router-dom";
 import { searchSharp, add, locationSharp } from 'ionicons/icons';
-
+import { context } from '../../App';
 
 
 interface IntrinsicElements {
@@ -12,9 +12,13 @@ interface IntrinsicElements {
 
 const Home: React.FC<IntrinsicElements> = ({ sendLocationtoParent }: IntrinsicElements, props) => {
 
+    const themeContext: any = useContext(context);
+    const { state, dispatch } = themeContext;
+
     let history = useHistory();
     const [location, setLocation] = useState('');
-    const [popularCities] = useState(['Delhi', 'Mumbai', 'Chennai', 'kolkata']);
+    const [popularCities] = useState(['Delhi', 'Mumbai', 'Chennai', 'kolkata', 'Pune',
+        'Jaipur', 'Sydney', 'Tokyo', 'New York', 'London']);
 
     const search = () => {
         sendLocationtoParent(location);
@@ -40,14 +44,14 @@ const Home: React.FC<IntrinsicElements> = ({ sendLocationtoParent }: IntrinsicEl
     return (
         <IonPage>
             <IonHeader >
-                <IonToolbar color="primary" >
+                <IonToolbar color={ state ? 'success' : 'primary' }  >
                     <IonButtons slot="start">
                         <IonBackButton />
                     </IonButtons>
                     <IonTitle>Search City</IonTitle>
                 </IonToolbar>
             </IonHeader>
-            <IonContent>
+            <IonContent color={ state ? 'light' : 'dark' }>
                 <div className="ion-padding">
                     <IonItem >
                         <IonLabel position="floating">Input the city name</IonLabel>
@@ -61,7 +65,7 @@ const Home: React.FC<IntrinsicElements> = ({ sendLocationtoParent }: IntrinsicEl
                 </div>
 
                 <div className="ion-padding">
-                    <p className="popular-cities">POPULAR CITIES</p>
+                    <p className={ state ? 'popular-cities-light' : 'popular-cities-dark' }>POPULAR CITIES</p>
                     { popularCities.map((city, index) =>
                         <IonChip color="medium" outline key={ index } onClick={ () => selectCity(city) }>
                             <IonLabel  >

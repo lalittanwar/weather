@@ -1,5 +1,10 @@
-.popular-cities {
+.popular-cities-light {
     color: navy;
+    padding: 0 0 0 7px;
+    font-weight: bold;
+}
+.popular-cities-dark {
+    color: white;
     padding: 0 0 0 7px;
     font-weight: bold;
 }

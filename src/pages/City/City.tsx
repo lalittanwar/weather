@@ -1,14 +1,17 @@
-import React, { useState, useEffect } from 'react'
-import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonItem, IonLabel, IonInput, IonButton, IonCard, IonCardContent, IonChip, IonIcon, IonLoading, IonFabButton, useIonViewWillEnter, IonCardHeader, IonItemSliding, IonItemOptions, IonItemOption, IonButtons, IonBackButton } from '@ionic/react';
+import React, { useState, useEffect, useContext } from 'react'
+import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonCard, IonCardContent, IonChip, IonIcon, IonLoading, IonFabButton, useIonViewWillEnter, IonCardHeader, IonItemOption, IonButtons, IonBackButton } from '@ionic/react';
 import { useHistory } from 'react-router-dom';
-import { add, archive, ellipsisHorizontal, ellipsisVertical, trash } from 'ionicons/icons';
+import { add } from 'ionicons/icons';
 import { fetchWeather } from '../../api';
 import './City.css';
-import { trace } from 'console';
+import { context } from '../../App';
 
 const City = ({ sendLocationtoParent }: any) => {
 
     let history = useHistory();
+
+    const themeContext: any = useContext(context);
+    const { state, dispatch } = themeContext;
 
     const [location, setLocation] = useState('');
     const [cities, setCities] = useState([]);
@@ -46,15 +49,14 @@ const City = ({ sendLocationtoParent }: any) => {
     return (
         <IonPage>
             <IonHeader >
-                <IonToolbar color="primary" >
+                <IonToolbar color={ state ? 'success' : 'primary' } >
                     <IonButtons slot="start">
                         <IonBackButton />
                     </IonButtons>
-                    <IonTitle>City List</IonTitle>
+                    <IonTitle> City List</IonTitle>
                 </IonToolbar>
             </IonHeader>
-            <IonContent>
-
+            <IonContent color={ state ? 'light' : 'dark' }>
                 { weather.map((weather, index) =>
                     <IonCard className={ `city-${ weather?.main }` } key={ index } onClick={ () => selectCity(weather?.name) }>
                         <IonCardHeader style={ { fontSize: '25px', color: 'white' } }>{ weather?.temp }° </IonCardHeader>

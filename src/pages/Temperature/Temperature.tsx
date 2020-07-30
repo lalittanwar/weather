@@ -1,10 +1,10 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useContext } from 'react'
 import { IonPage, IonHeader, IonToolbar, IonButtons, IonTitle, IonContent, IonIcon, IonBackButton, useIonViewDidEnter, useIonViewWillEnter, useIonViewWillLeave, IonFabButton, IonLoading } from '@ionic/react'
 import './Temperature.css'
 import { flower, water, navigateCircle, thermometer, add, list } from 'ionicons/icons';
 import { useHistory } from 'react-router-dom';
 import NotFound from '../NotFound/NotFound';
-
+import { context } from '../../App';
 
 interface IntrinsicElements {
     data: any;
@@ -12,6 +12,9 @@ interface IntrinsicElements {
 }
 
 const Temperature: React.FC<IntrinsicElements> = (props: IntrinsicElements) => {
+
+    const themeContext: any = useContext(context);
+    const { state, dispatch } = themeContext;
 
     let history = useHistory();
     const [showLoading, setShowLoading] = useState(true);
@@ -51,7 +54,7 @@ const Temperature: React.FC<IntrinsicElements> = (props: IntrinsicElements) => {
         return (
             <IonPage>
                 <IonHeader>
-                    <IonToolbar color="primary" >
+                    <IonToolbar color={ state ? 'success' : 'primary' }  >
                         <IonButtons slot="start">
                             <IonBackButton />
                         </IonButtons>
