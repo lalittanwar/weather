@@ -23,16 +23,13 @@ const Location: React.FC = () => {
     const fetchData = async (country: any) => {
         let data = await fetchCovidData(country);
         setData(data);
-        console.log(data);
     }
 
     const fetchCountries = async (country: any) => {
         countries = await fetchCovidCountries(country);
-        console.log(countries);
     }
 
     const selectCountry = (e: any) => {
-        console.log(e.target.value);
         setCountry(e.target.value);
         fetchData(e.target.value);
     }

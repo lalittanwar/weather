@@ -25,12 +25,11 @@ const City = ({ sendLocationtoParent }: any) => {
     const setTemparatureToCity = async () => {
         let city: string[] = [];
         let weather: any[] = [];
-        console.log(city);
         for (let i = 0;i < localStorage.length;i++) {
             city[i] = localStorage.getItem(`${ i }`);
             weather[i] = await fetchWeather(city[i]);
         }
-        console.log(city, weather);
+
         setCities(city);
         setWeather(weather);
     }

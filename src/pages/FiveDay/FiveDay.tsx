@@ -16,7 +16,6 @@ const FiveDay: React.FC<IntrinsicElements> = (props: IntrinsicElements) => {
 
     useEffect(() => {
         setWeatherList(props?.data?.list);
-        console.log('w', weatherList);
     }, [props.data])
 
     if (!weatherList?.length) {

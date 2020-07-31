@@ -31,23 +31,14 @@ import Location from './pages/Location/Location';
 import City from './pages/City/City';
 import About from './pages/About/About';
 import { fetchWeather,fetchFiveDayForecast } from './api';
-// import { Provider,Consumer,context,stateProvider } from './Context/Context';
+import Maps from './pages/Maps/Maps';
+import city from './api/city.json';
 
-// const themes = {
-//     light: {
-//         header: 'success'
-//     },
-//     dark: {
-//         header: 'primary'
-//     }
-// }
 
 const themes = true;
 export const context = React.createContext( themes );
 
 const { Provider,Consumer } = context;
-
-
 
 const reducer = ( state,action ) => {
     switch ( action ) {
@@ -68,7 +59,6 @@ const App = () => {
 
     useEffect( () => {
         getDefaultLocation();
-        console.log( context );
     },[] )
 
 
@@ -78,8 +68,6 @@ const App = () => {
         setData( data );
         const fiveDaydata = await fetchFiveDayForecast( location );
         setFiveDaydata( fiveDaydata );
-        console.log( data );
-        console.log( fiveDaydata );
     }
 
 
@@ -105,6 +93,7 @@ const App = () => {
                             <Route path="/:tab(5-day)" render={ () => <FiveDay data={ fiveDaydata } /> } exact={ true } />
                             <Route path="/location" component={ Location } />
                             <Route path="/about" component={ About } />
+                            <Route path="/maps" component={ Maps } />
                             <Route path="/city" render={ () => <City sendLocationtoParent={ handler } /> } exact={ true } />
                             <Route path="/" render={ () => <Redirect to="/temperature" /> } exact={ true } />
                         </IonRouterOutlet>
@@ -123,7 +112,7 @@ const App = () => {
                             </IonTabButton>
                             <IonTabButton tab="about" href="/about">
                                 <IonIcon icon={ layers } />
-                                <IonLabel>About</IonLabel>
+                                <IonLabel>More</IonLabel>
                             </IonTabButton>
                         </IonTabBar>
                     </IonTabs>

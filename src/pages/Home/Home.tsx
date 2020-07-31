@@ -1,10 +1,9 @@
 import React, { useState, useContext } from 'react';
-import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonItem, IonLabel, IonInput, IonButton, IonCard, IonCardContent, IonChip, IonIcon, IonLoading, IonBackButton, IonButtons } from '@ionic/react';
+import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonItem, IonLabel, IonInput, IonButton, IonCard, IonCardContent, IonChip, IonIcon, IonLoading, IonBackButton, IonButtons, IonList, IonSearchbar } from '@ionic/react';
 import './Home.css';
 import { useHistory } from "react-router-dom";
-import { searchSharp, add, locationSharp } from 'ionicons/icons';
 import { context } from '../../App';
-
+import city from '../../api/city.json';
 
 interface IntrinsicElements {
     sendLocationtoParent: any;
@@ -17,6 +16,7 @@ const Home: React.FC<IntrinsicElements> = ({ sendLocationtoParent }: IntrinsicEl
 
     let history = useHistory();
     const [location, setLocation] = useState('');
+    const [filterCity, setfilterCity] = useState([]);
     const [popularCities] = useState(['Delhi', 'Mumbai', 'Chennai', 'kolkata', 'Pune',
         'Jaipur', 'Sydney', 'Tokyo', 'New York', 'London']);
 
@@ -26,20 +26,24 @@ const Home: React.FC<IntrinsicElements> = ({ sendLocationtoParent }: IntrinsicEl
         setLocation('');
     }
 
-
-    const addCity = () => {
-        let city = [];
-        let i: number = localStorage.length;
-        localStorage.setItem(i.toString(), location);
-        history.push('/city');
-        setLocation('');
-    }
-
     const selectCity = (city: any) => {
         sendLocationtoParent(city);
         history.push('/temperature');
     }
 
+    const typeCity = (e: any) => {
+        if (e.detail.value!) {
+            const filterCity = city.filter((c) => {
+                if (c.name.toLowerCase().match((e.detail.value!).toLowerCase())) {
+                    return c;
+                }
+            })
+            setfilterCity(filterCity.slice(0, 10));
+        } else {
+            setfilterCity([]);
+        }
+        setLocation(e.detail.value!)
+    }
 
     return (
         <IonPage>
@@ -52,18 +56,14 @@ const Home: React.FC<IntrinsicElements> = ({ sendLocationtoParent }: IntrinsicEl
                 </IonToolbar>
             </IonHeader>
             <IonContent color={ state ? 'light' : 'dark' }>
-                <div className="ion-padding">
-                    <IonItem >
-                        <IonLabel position="floating">Input the city name</IonLabel>
-                        <IonInput value={ location } onIonChange={ e => setLocation(e.detail.value!) }></IonInput>
-                    </IonItem><br />
-                    <div className="center" >
-                        <IonButton className="ion=padding" color="tertiary" size="small" onClick={ search }>   <IonIcon icon={ searchSharp } />Search</IonButton>
-                        <IonButton color="danger" size="small" onClick={ addCity }>   <IonIcon icon={ add } />Add</IonButton>
-                        <IonButton color="secondary" size="small" onClick={ () => history.push('/location') }>   <IonIcon icon={ locationSharp } />Location</IonButton>
-                    </div>
-                </div>
-
+                <IonSearchbar placeholder="Input the city name"
+                    debounce={ 0 } animated={ true } value={ location }
+                    onIonChange={ e => typeCity(e) }></IonSearchbar>
+                <IonList>
+                    { filterCity.map((el, i) => <IonItem key={ i } onClick={ () => selectCity(el.name) }>
+                        <IonLabel >{ el.name } <p className="country">{ el.country }</p></IonLabel>
+                    </IonItem>) }
+                </IonList>
                 <div className="ion-padding">
                     <p className={ state ? 'popular-cities-light' : 'popular-cities-dark' }>POPULAR CITIES</p>
                     { popularCities.map((city, index) =>
@@ -74,7 +74,7 @@ const Home: React.FC<IntrinsicElements> = ({ sendLocationtoParent }: IntrinsicEl
                         </IonChip>) }
                 </div>
             </IonContent>
-        </IonPage>
+        </IonPage >
 
     );
 };

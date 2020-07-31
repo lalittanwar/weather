@@ -19,7 +19,7 @@ const About = () => {
         <IonPage>
             <IonHeader >
                 <IonToolbar color={ state ? 'success' : 'primary' } >
-                    <IonTitle>About</IonTitle>
+                    <IonTitle>More</IonTitle>
                 </IonToolbar>
             </IonHeader>
             <IonContent color={ state ? 'light' : 'dark' }>

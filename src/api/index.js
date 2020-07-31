@@ -29,6 +29,25 @@ export const fetchFiveDayForecast = async ( city ) => {
     }
 }
 
+
+export const fetchWeatherLatLng = async ( lat,lng ) => {
+    try {
+        const { data } = await axios.get( `https://api.openweathermap.org/data/2.5/weather?lat=${ lat }&lon=${ lng }&appid=761054a7adf90be0fd31535e2b0cbf31` )
+        const modifiedData = {
+            name: data.name,
+            temp: data.main.temp,
+            main: data.weather[ 0 ].main,
+            humidity: data.main.humidity,
+            pressure: data.main.pressure,
+            wind: data.wind.speed
+        }
+        console.log( data );
+        return modifiedData;
+    } catch ( error ) {
+        console.log( error.response.data.message )
+    }
+}
+
 let url = 'https://covid19.mathdro.id/api'
 
 export const fetchCovidData = async ( country ) => {

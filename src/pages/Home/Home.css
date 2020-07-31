@@ -11,3 +11,7 @@
 .center {
     text-align: center;
 }
+.country {
+    color: gray;
+    font-size: 80%;
+}
