@@ -71,12 +71,13 @@ const App = () => {
     }
 
 
-    const handler = ( location ) => {
+    const handler = async ( location ) => {
         fetchWeather( location ).then( ( data ) => {
             setData( data );
         } ).catch( ( err ) => {
             setError( err );
         } )
+        const fiveDaydata = await fetchFiveDayForecast( location );
         setFiveDaydata( fiveDaydata );
 
     }

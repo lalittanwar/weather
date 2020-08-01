@@ -20,21 +20,25 @@ const Home: React.FC<IntrinsicElements> = ({ sendLocationtoParent }: IntrinsicEl
     const [popularCities] = useState(['Delhi', 'Mumbai', 'Chennai', 'kolkata', 'Pune',
         'Jaipur', 'Sydney', 'Tokyo', 'New York', 'London']);
 
-    const search = () => {
-        sendLocationtoParent(location);
-        history.push('/temperature');
-        setLocation('');
-    }
-
     const selectCity = (city: any) => {
         sendLocationtoParent(city);
+        let cities = localStorage.getItem('city');
+        let newCities: any = [];
+        if (cities) {
+            newCities = cities.split(',');
+        }
+        newCities.push(city);
+        localStorage.setItem('city', newCities.toString())
+        setLocation('');
         history.push('/temperature');
     }
 
     const typeCity = (e: any) => {
-        if (e.detail.value!) {
+        const typed = e.detail.value!;
+        let length = typed.length;
+        if (typed) {
             const filterCity = city.filter((c) => {
-                if (c.name.toLowerCase().match((e.detail.value!).toLowerCase())) {
+                if ((c.name.toLowerCase().slice(0, length)) == (typed.toLowerCase())) {
                     return c;
                 }
             })

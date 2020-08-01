@@ -1,10 +1,11 @@
 import React, { useState, useEffect, useContext } from 'react'
 import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonCard, IonCardContent, IonChip, IonIcon, IonLoading, IonFabButton, useIonViewWillEnter, IonCardHeader, IonItemOption, IonButtons, IonBackButton } from '@ionic/react';
 import { useHistory } from 'react-router-dom';
-import { add } from 'ionicons/icons';
+import { add, closeCircle } from 'ionicons/icons';
 import { fetchWeather } from '../../api';
 import './City.css';
 import { context } from '../../App';
+import { relative } from 'path';
 
 const City = ({ sendLocationtoParent }: any) => {
 
@@ -17,20 +18,26 @@ const City = ({ sendLocationtoParent }: any) => {
     const [cities, setCities] = useState([]);
     const [weather, setWeather] = useState([]);
     const [showLoading, setShowLoading] = useState(true);
+    let newCities: any = [];
 
     useIonViewWillEnter(() => {
         setTemparatureToCity();
     }, [])
 
-    const setTemparatureToCity = async () => {
-        let city: string[] = [];
-        let weather: any[] = [];
-        for (let i = 0;i < localStorage.length;i++) {
-            city[i] = localStorage.getItem(`${ i }`);
-            weather[i] = await fetchWeather(city[i]);
-        }
+    useEffect(() => {
+        setTemparatureToCity();
+    }, [cities.length])
 
-        setCities(city);
+    const setTemparatureToCity = async () => {
+        let weather: any[] = [];
+        let cities = localStorage.getItem('city');
+        if (cities) {
+            newCities = cities.split(',');
+        }
+        for (let i = 0;i < newCities.length;i++) {
+            weather[i] = await fetchWeather(newCities[i]);
+        }
+        setCities(newCities);
         setWeather(weather);
     }
 
@@ -43,6 +50,17 @@ const City = ({ sendLocationtoParent }: any) => {
     setTimeout(() => {
         setShowLoading(false);
     }, 2000);
+
+    const deleteCity = (city: string) => {
+        let cities = localStorage.getItem('city');
+        if (cities) {
+            newCities = cities.split(',');
+        }
+        let index = newCities.indexOf(city);
+        newCities.splice(index, 1);
+        localStorage.setItem('city', newCities.toString())
+        setCities(newCities);
+    }
 
 
     return (
@@ -57,13 +75,18 @@ const City = ({ sendLocationtoParent }: any) => {
             </IonHeader>
             <IonContent color={ state ? 'light' : 'dark' }>
                 { weather.map((weather, index) =>
-                    <IonCard className={ `city-${ weather?.main }` } key={ index } onClick={ () => selectCity(weather?.name) }>
-                        <IonCardHeader style={ { fontSize: '25px', color: 'white' } }>{ parseInt(weather?.temp) }° </IonCardHeader>
-                        <IonCardContent >
-                            <span className="name">{ weather?.name }</span>
-                            <span className="type">{ weather?.main }</span>
-                        </IonCardContent >
-                    </IonCard>) }
+                    <div key={ index } style={ { 'position': 'relative' } }>
+                        <IonIcon color="medium" icon={ closeCircle } size="large" className="icon-postion"
+                            onClick={ () => deleteCity(weather?.name) } />
+                        <IonCard className={ `city-${ weather?.main }` } onClick={ () => selectCity(weather?.name) }>
+                            <IonCardHeader style={ { fontSize: '25px', color: 'white' } }>{ parseInt(weather?.temp) }° </IonCardHeader>
+                            <IonCardContent >
+                                <span className="name">{ weather?.name }</span>
+                                <span className="type">{ weather?.main }</span>
+                            </IonCardContent >
+                        </IonCard>
+
+                    </div>) }
                 <IonFabButton color="tertiary" className="fab-button" onClick={ () => history.push('/home') }>
                     <IonIcon icon={ add } /></IonFabButton>
                 <IonLoading
