@@ -1,10 +1,9 @@
-import React, { useState } from 'react';
-import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonItem, IonLabel, IonInput, IonButton, IonCard, IonCardContent, IonChip, IonIcon, IonLoading, IonBackButton, IonButtons } from '@ionic/react';
+import React, { useState, useContext } from 'react';
+import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonItem, IonLabel, IonInput, IonButton, IonCard, IonCardContent, IonChip, IonIcon, IonLoading, IonBackButton, IonButtons, IonList, IonSearchbar } from '@ionic/react';
 import './Home.css';
 import { useHistory } from "react-router-dom";
-import { searchSharp, add, locationSharp } from 'ionicons/icons';
-
-
+import { context } from '../../App';
+import city from '../../api/city.json';
 
 interface IntrinsicElements {
     sendLocationtoParent: any;
@@ -12,56 +11,65 @@ interface IntrinsicElements {
 
 const Home: React.FC<IntrinsicElements> = ({ sendLocationtoParent }: IntrinsicElements, props) => {
 
+    const themeContext: any = useContext(context);
+    const { state, dispatch } = themeContext;
+
     let history = useHistory();
     const [location, setLocation] = useState('');
-    const [popularCities] = useState(['Delhi', 'Mumbai', 'Chennai', 'kolkata']);
-
-    const search = () => {
-        sendLocationtoParent(location);
-        history.push('/temperature');
-        setLocation('');
-    }
-
-
-    const addCity = () => {
-        let city = [];
-        let i: number = localStorage.length;
-        localStorage.setItem(i.toString(), location);
-        history.push('/city');
-        setLocation('');
-    }
+    const [filterCity, setfilterCity] = useState([]);
+    const [popularCities] = useState(['Delhi', 'Mumbai', 'Chennai', 'kolkata', 'Pune',
+        'Jaipur', 'Sydney', 'Tokyo', 'New York', 'London']);
 
     const selectCity = (city: any) => {
         sendLocationtoParent(city);
+        let cities = localStorage.getItem('city');
+        let newCities: any = [];
+        if (cities) {
+            newCities = cities.split(',');
+        }
+        newCities.push(city);
+        localStorage.setItem('city', newCities.toString())
+        setLocation('');
         history.push('/temperature');
     }
 
+    const typeCity = (e: any) => {
+        const typed = e.detail.value!;
+        let length = typed.length;
+        if (typed) {
+            const filterCity = city.filter((c) => {
+                if ((c.name.toLowerCase().slice(0, length)) == (typed.toLowerCase())) {
+                    return c;
+                }
+            })
+            setfilterCity(filterCity.slice(0, 10));
+        } else {
+            setfilterCity([]);
+        }
+        setLocation(e.detail.value!)
+    }
 
     return (
         <IonPage>
             <IonHeader >
-                <IonToolbar color="primary" >
+                <IonToolbar color={ state ? 'success' : 'primary' }  >
                     <IonButtons slot="start">
                         <IonBackButton />
                     </IonButtons>
                     <IonTitle>Search City</IonTitle>
                 </IonToolbar>
             </IonHeader>
-            <IonContent>
+            <IonContent color={ state ? 'light' : 'dark' }>
+                <IonSearchbar placeholder="Input the city name"
+                    debounce={ 0 } animated={ true } value={ location }
+                    onIonChange={ e => typeCity(e) }></IonSearchbar>
+                <IonList>
+                    { filterCity.map((el, i) => <IonItem key={ i } onClick={ () => selectCity(el.name) }>
+                        <IonLabel >{ el.name } <p className="country">{ el.country }</p></IonLabel>
+                    </IonItem>) }
+                </IonList>
                 <div className="ion-padding">
-                    <IonItem >
-                        <IonLabel position="floating">Input the city name</IonLabel>
-                        <IonInput value={ location } onIonChange={ e => setLocation(e.detail.value!) }></IonInput>
-                    </IonItem><br />
-                    <div className="center" >
-                        <IonButton className="ion=padding" color="tertiary" size="small" onClick={ search }>   <IonIcon icon={ searchSharp } />Search</IonButton>
-                        <IonButton color="danger" size="small" onClick={ addCity }>   <IonIcon icon={ add } />Add</IonButton>
-                        <IonButton color="secondary" size="small" onClick={ () => history.push('/location') }>   <IonIcon icon={ locationSharp } />Location</IonButton>
-                    </div>
-                </div>
-
-                <div className="ion-padding">
-                    <p className="popular-cities">POPULAR CITIES</p>
+                    <p className={ state ? 'popular-cities-light' : 'popular-cities-dark' }>POPULAR CITIES</p>
                     { popularCities.map((city, index) =>
                         <IonChip color="medium" outline key={ index } onClick={ () => selectCity(city) }>
                             <IonLabel  >
@@ -70,7 +78,7 @@ const Home: React.FC<IntrinsicElements> = ({ sendLocationtoParent }: IntrinsicEl
                         </IonChip>) }
                 </div>
             </IonContent>
-        </IonPage>
+        </IonPage >
 
     );
 };

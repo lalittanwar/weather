@@ -49,7 +49,10 @@
 .temp {
     color: white;
     font-size: 300%;
-    padding: 0 0 10px 0px;
+    padding: 5px 0 10px 10px;
+}
+.weather-padding {
+    padding: 5px 0px 0px 10px;
 }
 .weather {
     color: white;

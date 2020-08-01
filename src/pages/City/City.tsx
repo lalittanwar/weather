@@ -1,34 +1,43 @@
-import React, { useState, useEffect } from 'react'
-import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonItem, IonLabel, IonInput, IonButton, IonCard, IonCardContent, IonChip, IonIcon, IonLoading, IonFabButton, useIonViewWillEnter, IonCardHeader, IonItemSliding, IonItemOptions, IonItemOption, IonButtons, IonBackButton } from '@ionic/react';
+import React, { useState, useEffect, useContext } from 'react'
+import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonCard, IonCardContent, IonChip, IonIcon, IonLoading, IonFabButton, useIonViewWillEnter, IonCardHeader, IonItemOption, IonButtons, IonBackButton } from '@ionic/react';
 import { useHistory } from 'react-router-dom';
-import { add, archive, ellipsisHorizontal, ellipsisVertical, trash } from 'ionicons/icons';
+import { add, closeCircle } from 'ionicons/icons';
 import { fetchWeather } from '../../api';
 import './City.css';
-import { trace } from 'console';
+import { context } from '../../App';
+import { relative } from 'path';
 
 const City = ({ sendLocationtoParent }: any) => {
 
     let history = useHistory();
 
+    const themeContext: any = useContext(context);
+    const { state, dispatch } = themeContext;
+
     const [location, setLocation] = useState('');
     const [cities, setCities] = useState([]);
     const [weather, setWeather] = useState([]);
     const [showLoading, setShowLoading] = useState(true);
+    let newCities: any = [];
 
     useIonViewWillEnter(() => {
         setTemparatureToCity();
     }, [])
 
+    useEffect(() => {
+        setTemparatureToCity();
+    }, [cities.length])
+
     const setTemparatureToCity = async () => {
-        let city: string[] = [];
         let weather: any[] = [];
-        console.log(city);
-        for (let i = 0;i < localStorage.length;i++) {
-            city[i] = localStorage.getItem(`${ i }`);
-            weather[i] = await fetchWeather(city[i]);
+        let cities = localStorage.getItem('city');
+        if (cities) {
+            newCities = cities.split(',');
         }
-        console.log(city, weather);
-        setCities(city);
+        for (let i = 0;i < newCities.length;i++) {
+            weather[i] = await fetchWeather(newCities[i]);
+        }
+        setCities(newCities);
         setWeather(weather);
     }
 
@@ -42,27 +51,42 @@ const City = ({ sendLocationtoParent }: any) => {
         setShowLoading(false);
     }, 2000);
 
+    const deleteCity = (city: string) => {
+        let cities = localStorage.getItem('city');
+        if (cities) {
+            newCities = cities.split(',');
+        }
+        let index = newCities.indexOf(city);
+        newCities.splice(index, 1);
+        localStorage.setItem('city', newCities.toString())
+        setCities(newCities);
+    }
+
 
     return (
         <IonPage>
             <IonHeader >
-                <IonToolbar color="primary" >
+                <IonToolbar color={ state ? 'success' : 'primary' } >
                     <IonButtons slot="start">
                         <IonBackButton />
                     </IonButtons>
-                    <IonTitle>City List</IonTitle>
+                    <IonTitle> City List</IonTitle>
                 </IonToolbar>
             </IonHeader>
-            <IonContent>
-
+            <IonContent color={ state ? 'light' : 'dark' }>
                 { weather.map((weather, index) =>
-                    <IonCard className={ `city-${ weather?.main }` } key={ index } onClick={ () => selectCity(weather?.name) }>
-                        <IonCardHeader style={ { fontSize: '25px', color: 'white' } }>{ weather?.temp }° </IonCardHeader>
-                        <IonCardContent >
-                            <span className="name">{ weather?.name }</span>
-                            <span className="type">{ weather?.main }</span>
-                        </IonCardContent >
-                    </IonCard>) }
+                    <div key={ index } style={ { 'position': 'relative' } }>
+                        <IonIcon color="medium" icon={ closeCircle } size="large" className="icon-postion"
+                            onClick={ () => deleteCity(weather?.name) } />
+                        <IonCard className={ `city-${ weather?.main }` } onClick={ () => selectCity(weather?.name) }>
+                            <IonCardHeader style={ { fontSize: '25px', color: 'white' } }>{ parseInt(weather?.temp) }° </IonCardHeader>
+                            <IonCardContent >
+                                <span className="name">{ weather?.name }</span>
+                                <span className="type">{ weather?.main }</span>
+                            </IonCardContent >
+                        </IonCard>
+
+                    </div>) }
                 <IonFabButton color="tertiary" className="fab-button" onClick={ () => history.push('/home') }>
                     <IonIcon icon={ add } /></IonFabButton>
                 <IonLoading

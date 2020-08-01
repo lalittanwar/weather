@@ -1,0 +1,17 @@
+.covid-confirmed {
+    border-right: 10px solid green;
+}
+.covid-recovered {
+    border-right: 10px solid rgb(61, 61, 192);
+}
+.covid-deaths {
+    border-right: 10px solid rgb(180, 65, 65);
+}
+.covid-value {
+    font-size: 150%;
+    color: black;
+    font-weight: bold;
+}
+.covid-center {
+    text-align: center;
+}
