@@ -22,6 +22,7 @@ const City = ({ sendLocationtoParent }: any) => {
 
     useIonViewWillEnter(() => {
         setTemparatureToCity();
+        setShowLoading(false)
     }, [])
 
     useEffect(() => {
@@ -47,9 +48,6 @@ const City = ({ sendLocationtoParent }: any) => {
         history.push('/temperature');
     }
 
-    setTimeout(() => {
-        setShowLoading(false);
-    }, 2000);
 
     const deleteCity = (city: string) => {
         let cities = localStorage.getItem('city');
@@ -65,7 +63,7 @@ const City = ({ sendLocationtoParent }: any) => {
 
     return (
         <IonPage>
-            <IonHeader >
+            <IonHeader style={ state ? null : { 'borderBottom': '1px solid gray' } }>
                 <IonToolbar color={ state ? 'success' : 'primary' } >
                     <IonButtons slot="start">
                         <IonBackButton />
@@ -87,14 +85,13 @@ const City = ({ sendLocationtoParent }: any) => {
                         </IonCard>
 
                     </div>) }
-                <IonFabButton color="tertiary" className="fab-button" onClick={ () => history.push('/home') }>
+                <IonFabButton color={ state ? 'success' : 'tertiary' } className="fab-button" onClick={ () => history.push('/home') }>
                     <IonIcon icon={ add } /></IonFabButton>
                 <IonLoading
                     spinner="lines-small"
                     isOpen={ showLoading }
                     onDidDismiss={ () => setShowLoading(false) }
                     message={ 'Please wait...' }
-                    duration={ 1000 }
                 />
             </IonContent>
         </IonPage>

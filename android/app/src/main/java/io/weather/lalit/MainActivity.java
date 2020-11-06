@@ -1,4 +1,4 @@
-package io.ionic.starter;
+package io.weather.lalit;
 
 import android.os.Bundle;
 

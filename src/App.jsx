@@ -98,7 +98,8 @@ const App = () => {
                             <Route path="/city" render={ () => <City sendLocationtoParent={ handler } /> } exact={ true } />
                             <Route path="/" render={ () => <Redirect to="/temperature" /> } exact={ true } />
                         </IonRouterOutlet>
-                        <IonTabBar slot="bottom" color={ state ? 'success' : 'primary' } >
+                        <IonTabBar slot="bottom" color={ state ? 'success' : 'primary' }
+                            style={ state ? { 'borderTop': '1px solid #13B7E1' } : { 'borderTop': '1px solid gray' } }>
                             <IonTabButton tab="temperature" href="/temperature">
                                 <IonIcon icon={ thermometer } />
                                 <IonLabel>Today</IonLabel>
