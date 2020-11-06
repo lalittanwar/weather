@@ -1,5 +1,5 @@
 .covid-confirmed {
-    border-right: 10px solid green;
+    border-right: 10px solid rgb(96, 211, 96);
 }
 .covid-recovered {
     border-right: 10px solid rgb(61, 61, 192);

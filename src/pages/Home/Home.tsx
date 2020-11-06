@@ -51,7 +51,7 @@ const Home: React.FC<IntrinsicElements> = ({ sendLocationtoParent }: IntrinsicEl
 
     return (
         <IonPage>
-            <IonHeader >
+            <IonHeader style={ state ? null : { 'borderBottom': '1px solid gray' } }>
                 <IonToolbar color={ state ? 'success' : 'primary' }  >
                     <IonButtons slot="start">
                         <IonBackButton />
@@ -63,11 +63,12 @@ const Home: React.FC<IntrinsicElements> = ({ sendLocationtoParent }: IntrinsicEl
                 <IonSearchbar placeholder="Input the city name"
                     debounce={ 0 } animated={ true } value={ location }
                     onIonChange={ e => typeCity(e) }></IonSearchbar>
-                <IonList>
+                { filterCity.length ? (<IonList>
                     { filterCity.map((el, i) => <IonItem key={ i } onClick={ () => selectCity(el.name) }>
                         <IonLabel >{ el.name } <p className="country">{ el.country }</p></IonLabel>
                     </IonItem>) }
-                </IonList>
+                </IonList>) : null }
+
                 <div className="ion-padding">
                     <p className={ state ? 'popular-cities-light' : 'popular-cities-dark' }>POPULAR CITIES</p>
                     { popularCities.map((city, index) =>

@@ -4,9 +4,9 @@ import './Location.css';
 import { fetchCovidData, fetchCovidCountries } from './../../api';
 import CountUp from 'react-countup';
 import { context } from '../../App';
+import { Line, Bar } from 'react-chartjs-2';
 
 let countries: any = null;
-
 
 const Location: React.FC = () => {
 
@@ -34,14 +34,13 @@ const Location: React.FC = () => {
         fetchData(e.target.value);
     }
 
-
     if (!data) {
         return <p>Loading.....</p>
     }
 
     return (
         <IonPage>
-            <IonHeader>
+            <IonHeader style={ state ? null : { 'borderBottom': '1px solid gray' } }>
                 <IonToolbar color={ state ? 'success' : 'primary' }>
                     <IonTitle>Covid-19</IonTitle>
                 </IonToolbar>
@@ -94,6 +93,26 @@ const Location: React.FC = () => {
                         <p>{ new Date(data?.lastUpdate).toDateString() }</p>
                     </IonCardContent >
                 </IonCard>
+
+                <Bar data={ {
+                    labels: ['Infected', 'Recovered', 'Deaths'],
+                    datasets: [{
+                        label: 'People',
+                        backgroundColor: ['rgb(96, 211, 96)', 'rgb(61, 61, 192)', 'rgb(180, 65, 65)'],
+                        data: [data?.confirmed?.value, data?.recovered?.value, data?.deaths?.value]
+                    }]
+                } }
+                    options={ {
+                        title: {
+                            display: true,
+                            text: `Selected country is ${ country }`
+                        },
+                        legend: {
+                            display: false,
+                            position: 'right'
+                        }
+                    } }
+                />
 
             </IonContent>
         </IonPage >

@@ -39,15 +39,12 @@ const Temperature: React.FC<IntrinsicElements> = (props: IntrinsicElements) => {
         setError(props.error);
     }, [props.data, props.error])
 
-    setTimeout(() => {
-        setShowLoading(false);
-    }, 2000);
-
     useIonViewWillEnter(() => {
-        setShowLoading(true);
+
     })
 
     const getLocation = () => {
+        setShowLoading(true);
         Geolocation.getCurrentPosition({
             timeout: 30000,
             maximumAge: 0, //was 0
@@ -103,7 +100,7 @@ const Temperature: React.FC<IntrinsicElements> = (props: IntrinsicElements) => {
                         isOpen={ showLoading }
                         onDidDismiss={ () => setShowLoading(false) }
                         message={ 'Please wait...' }
-                        duration={ 1000 }
+                        duration={ 500 }
                     />
                 </IonContent>
             </IonPage>
